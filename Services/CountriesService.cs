@@ -52,4 +52,20 @@ public class CountriesService : ICountriesService
         //converting each element from country to ToCountryResponse -> returns ToCountryResponse
         return _countries.Select(country => country.ToCountryResponse()).ToList();
     }
+
+    public CountryResponse? GetCountryByCountryId(Guid? countryID)
+    {
+        if(countryID == null)
+        {
+            return null;
+        }
+        // ako ni jedan element ne odgovara vracamo default(null)
+        Country? country_response_from_list = _countries.FirstOrDefault(temp => temp.CountryId == countryID);
+        if(country_response_from_list == null) 
+        { 
+            return null; 
+        }
+        //converting country obj to countryResponse type
+        return country_response_from_list.ToCountryResponse();
+    }
 }
