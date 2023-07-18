@@ -16,13 +16,22 @@
             <select class="form-input" name="searchBy">
                 @foreach(var field in ViewBag.SearchFields)
                 {
-                    <option value="@field.Key">@field.Value</option>
+                    //field.Key => property name
+                    if (field.Key == ViewBag.CurrentSearchBy)
+                    {
+                       // selected = "selected" => automatski ce biti izabran specific item kad se otvori view, umjesto default or first option
+                        <option value="@field.Key" selected="selected">@field.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@field.Key">@field.Value</option>
+                    }
                 }
                 @*Eg: searchBy=PersonName&searchString=abc*@
             </select>
         </div>
         <div class="flex-1">
-            <input type="search" id="Search" class="form-input" placeholder="Search" name="searchString"/>
+            <input type="search" id="Search" class="form-input" placeholder="Search" name="searchString" value="@ViewBag.CurrentSearchString" />
         </div>
         <div class="flex-1">
             <button class="button button-blue-back">Search</button>
@@ -33,7 +42,28 @@
     <table class="table w-100 mt">
         <thead>
             <tr>
-                <th>Person Name</th>
+                
+                    @if (ViewBag.CurrentSortBy == nameof(PersonResponse.PersonName) && ViewBag.CurrentSortOrder == SortOrderOptions.ASC.ToString())
+                    {
+                        <th>
+                        <a href="~/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=@nameof(SortOrderOptions.DESC)">Person Name</a>
+                        <i class="fa-solid fa-sort-up"></i>
+                        </th>
+                    }
+                    else if (ViewBag.CurrentSortBy == nameof(PersonResponse.PersonName) && ViewBag.CurrentSortOrder == SortOrderOptions.DESC.ToString())
+                    {
+                        <th>
+                        <a href="~/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=@nameof(SortOrderOptions.ASC)">Person Name</a>
+                        <i class="fa-solid fa-sort-down"></i>
+                        </th>
+                    }
+                    else
+                    {   
+                        <th>
+                        <a href="~/persons/index?searchBy=@ViewBag.CurrentSearchBy&searchString=@ViewBag.CurrentSearchString&sortBy=@nameof(PersonResponse.PersonName)&sortOrder=@nameof(SortOrderOptions.ASC)">Person Name</a>
+                        </th>
+                    }
+                
                 <th>Email</th>
                 <th>Date of Birth</th>
                 <th>Age</th>
