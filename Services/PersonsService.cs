@@ -54,7 +54,7 @@ namespace Services
             }
         }
 
-        
+
         private PersonResponse ConvertPersonToPersonResponse(Person person)
         {
             PersonResponse personResponse = person.ToPersonResponse();
@@ -70,13 +70,7 @@ namespace Services
                 throw new ArgumentNullException(nameof(personAddRequest));
             }
 
-            //Validate PersonName
-            //if (string.IsNullOrEmpty(personAddRequest.PersonName))
-            //{
-            //    throw new ArgumentException("PersonName cant be blank");
-            //}
-
-            //Model Validations - stavili smo model u ValidationHelper class
+            //Model validation
             ValidationHelper.ModelValiddation(personAddRequest);
 
             //convert personAddRequest into Person type
@@ -89,51 +83,42 @@ namespace Services
             _persons.Add(person);
 
             //convert the Person object into PersonResponse type
-            PersonResponse personResponse = person.ToPersonResponse();
-            personResponse.Country = _countriesService.GetCountryByCountryId(person.CountryID)?.CountryName;
-
             return ConvertPersonToPersonResponse(person);
-
-
         }
+
 
         public List<PersonResponse> GetAllPersons()
         {
-            return _persons.Select(temp => temp.ToPersonResponse()).ToList(); 
+            return _persons.Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
         }
+
 
         public PersonResponse? GetPersonByPersonID(Guid? personID)
         {
             if (personID == null)
-            {
                 return null;
-            }
-            Person? person =_persons.FirstOrDefault(temp => temp.PersonID == personID);
 
+            Person? person = _persons.FirstOrDefault(temp => temp.PersonID == personID);
             if (person == null)
-            {
                 return null;
-            }
 
-            return person.ToPersonResponse();
+            return ConvertPersonToPersonResponse(person);
         }
 
         public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
         {
-
             List<PersonResponse> allPersons = GetAllPersons();
             List<PersonResponse> matchingPersons = allPersons;
 
             if (string.IsNullOrEmpty(searchBy) || string.IsNullOrEmpty(searchString))
                 return matchingPersons;
 
+
             switch (searchBy)
             {
-                //nameof - only model property name, not a value
                 case nameof(PersonResponse.PersonName):
                     matchingPersons = allPersons.Where(temp =>
                     (!string.IsNullOrEmpty(temp.PersonName) ?
-                    //OrdinalIgnoreCase - da ignorise velika i mala slova kod uporedjivanja (Windows == windows)
                     temp.PersonName.Contains(searchString, StringComparison.OrdinalIgnoreCase) : true)).ToList();
                     break;
 
@@ -242,7 +227,7 @@ namespace Services
             matchingPerson.Address = personUpdateRequest.Address;
             matchingPerson.ReceiveNewsLetters = personUpdateRequest.ReceiveNewsLetters;
 
-            return matchingPerson.ToPersonResponse();
+            return ConvertPersonToPersonResponse(matchingPerson);
         }
 
         public bool DeletePerson(Guid? personID)

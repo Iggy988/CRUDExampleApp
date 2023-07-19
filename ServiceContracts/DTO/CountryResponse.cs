@@ -42,6 +42,6 @@ public static class CountryExtensions
 {
     public static CountryResponse ToCountryResponse(this Country country)
     {
-        return new CountryResponse() { CountryId = country.CountryId, CountryName = country.CountryName };
+        return new CountryResponse() { CountryId = country.CountryID, CountryName = country.CountryName };
     }
 }
