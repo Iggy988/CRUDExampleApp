@@ -6,7 +6,7 @@ namespace ServiceContracts.DTO;
 /// </summary>
 public class CountryResponse
 {
-    public Guid CountryId { get; set; }
+    public Guid CountryID { get; set; }
     public string? CountryName { get; set; }
 
     //objA.Equals(objB) -> dasn't compare values
@@ -26,7 +26,7 @@ public class CountryResponse
             return false;
         }
         CountryResponse country_to_compare = (CountryResponse)obj;
-        return CountryId == country_to_compare.CountryId && 
+        return CountryID == country_to_compare.CountryID && 
             CountryName == country_to_compare.CountryName;
     }
 
@@ -42,6 +42,6 @@ public static class CountryExtensions
 {
     public static CountryResponse ToCountryResponse(this Country country)
     {
-        return new CountryResponse() { CountryId = country.CountryID, CountryName = country.CountryName };
+        return new CountryResponse() { CountryID = country.CountryID, CountryName = country.CountryName };
     }
 }

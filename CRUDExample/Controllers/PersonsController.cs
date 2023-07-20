@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CRUDExample.Controllers;
 
@@ -54,8 +56,12 @@ public class PersonsController : Controller
     public IActionResult Create()
     {
         List<CountryResponse> countries = _countriesService.GetAllCountries();
-        ViewBag.Countries = countries;
+        ViewBag.Countries = countries.Select(temp =>
+          new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() }
+        );
 
+        //new SelectListItem() { Text="Harsha", Value="1" }
+        //<option value="1">Harsha</option>
         return View();
     }
 
@@ -67,7 +73,8 @@ public class PersonsController : Controller
         if (!ModelState.IsValid)
         {
             List<CountryResponse> countries = _countriesService.GetAllCountries();
-            ViewBag.Countries = countries;
+            ViewBag.Countries = countries.Select(temp =>
+            new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
 
             ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
             return View();
@@ -77,7 +84,7 @@ public class PersonsController : Controller
         PersonResponse personResponse = _personsService.AddPerson(personAddRequest);
 
         //navigate to Index() action method (it makes another get request to "persons/index"
-        return RedirectToAction("Index", "Persons", personResponse);
+        return RedirectToAction("Index", "Persons");
 
     }
 }

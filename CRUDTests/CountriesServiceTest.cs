@@ -75,7 +75,7 @@ public class CountriesServiceTest
         List<CountryResponse> countries_from_GetAllCountries = _countriesService.GetAllCountries();
 
         //Assert
-        Assert.True(response.CountryId != Guid.Empty);
+        Assert.True(response.CountryID != Guid.Empty);
         //takes equals method between 2 object
         Assert.Contains(response, countries_from_GetAllCountries);
         
@@ -155,7 +155,7 @@ public class CountriesServiceTest
         CountryResponse country_response_from_add = _countriesService.AddCountry(country_add_request);
 
         //Act
-        CountryResponse? country_response_from_get =  _countriesService.GetCountryByCountryId(country_response_from_add.CountryId);
+        CountryResponse? country_response_from_get =  _countriesService.GetCountryByCountryId(country_response_from_add.CountryID);
 
         //Assert
         Assert.Equal(country_response_from_add, country_response_from_get);

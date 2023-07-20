@@ -97,11 +97,11 @@ public class PersonsServiceTest
         CountryResponse country_response_1 = _countryService.AddCountry(country_request_1);
         CountryResponse country_response_2 = _countryService.AddCountry(country_request_2);
 
-        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryId, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryID, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
 
-        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
+        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
 
-        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
 
         List<PersonAddRequest> person_requests = new List<PersonAddRequest>() { person_request_1, person_request_2, person_request_3 };
 
@@ -149,11 +149,11 @@ public class PersonsServiceTest
         CountryResponse country_response_1 = _countryService.AddCountry(country_request_1);
         CountryResponse country_response_2 = _countryService.AddCountry(country_request_2);
 
-        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryId, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryID, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
 
-        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
+        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
 
-        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
 
         List<PersonAddRequest> person_requests = new List<PersonAddRequest>() { person_request_1, person_request_2, person_request_3 };
 
@@ -210,11 +210,11 @@ public class PersonsServiceTest
         CountryResponse country_response_1 = _countryService.AddCountry(country_request_1);
         CountryResponse country_response_2 = _countryService.AddCountry(country_request_2);
 
-        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryId, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_1 = new PersonAddRequest() { PersonName = "Smith", Email = "smith@example.com", Gender = GenderOptions.Male, Address = "address of smith", CountryID = country_response_1.CountryID, DateOfBirth = DateTime.Parse("2002-05-06"), ReceiveNewsLetters = true };
 
-        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
+        PersonAddRequest person_request_2 = new PersonAddRequest() { PersonName = "Mary", Email = "mary@example.com", Gender = GenderOptions.Female, Address = "address of mary", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("2000-02-02"), ReceiveNewsLetters = false };
 
-        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryId, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
+        PersonAddRequest person_request_3 = new PersonAddRequest() { PersonName = "Rahman", Email = "rahman@example.com", Gender = GenderOptions.Male, Address = "address of rahman", CountryID = country_response_2.CountryID, DateOfBirth = DateTime.Parse("1999-03-03"), ReceiveNewsLetters = true };
 
         List<PersonAddRequest> person_requests = new List<PersonAddRequest>() { person_request_1, person_request_2, person_request_3 };
 
@@ -284,7 +284,7 @@ public class PersonsServiceTest
             PersonName = "person name...",
             Email = "email@sample.com",
             Address = "address",
-            CountryID = country_response.CountryId,
+            CountryID = country_response.CountryID,
             DateOfBirth = DateTime.Parse("2000-01-01"),
             Gender = GenderOptions.Male,
             ReceiveNewsLetters = false
@@ -341,7 +341,7 @@ public class PersonsServiceTest
         CountryAddRequest country_add_request = new CountryAddRequest() { CountryName = "UK" };
         CountryResponse country_response_from_add = _countryService.AddCountry(country_add_request);
 
-        PersonAddRequest person_add_request = new PersonAddRequest() { PersonName = "Igor", CountryID = country_response_from_add.CountryId, Email = "igor@example.com", Address = "address...", Gender = GenderOptions.Male };
+        PersonAddRequest person_add_request = new PersonAddRequest() { PersonName = "Igor", CountryID = country_response_from_add.CountryID, Email = "igor@example.com", Address = "address...", Gender = GenderOptions.Male };
 
         PersonResponse person_response_from_add = _personService.AddPerson(person_add_request);
 
@@ -368,7 +368,7 @@ public class PersonsServiceTest
         CountryResponse country_response_from_add = _countryService.AddCountry(country_add_request);
 
         PersonAddRequest person_add_request = new PersonAddRequest() 
-        { PersonName = "John", CountryID = country_response_from_add.CountryId, Address = "Abc road",
+        { PersonName = "John", CountryID = country_response_from_add.CountryID, Address = "Abc road",
             DateOfBirth = DateTime.Parse("2000-01-01"), Email = "abc@example.com", Gender = GenderOptions.Male, ReceiveNewsLetters = true 
         };
 
@@ -400,7 +400,7 @@ public class PersonsServiceTest
         CountryAddRequest country_add_request = new CountryAddRequest() { CountryName = "Russia" };
         CountryResponse country_response_from_add = _countryService.AddCountry(country_add_request);
 
-        PersonAddRequest person_add_request = new PersonAddRequest() { PersonName = "Igor", Address = "address", CountryID = country_response_from_add.CountryId, DateOfBirth = Convert.ToDateTime("2010-01-01"), Email = "igor@example.com", Gender = GenderOptions.Male, ReceiveNewsLetters = true };
+        PersonAddRequest person_add_request = new PersonAddRequest() { PersonName = "Igor", Address = "address", CountryID = country_response_from_add.CountryID, DateOfBirth = Convert.ToDateTime("2010-01-01"), Email = "igor@example.com", Gender = GenderOptions.Male, ReceiveNewsLetters = true };
 
         PersonResponse person_response_from_add = _personService.AddPerson(person_add_request);
 
@@ -456,7 +456,7 @@ public class PersonsServiceTest
             Email = "smith@example.com",
             Gender = GenderOptions.Male,
             Address = "address of smith",
-            CountryID = country_response_1.CountryId,
+            CountryID = country_response_1.CountryID,
             DateOfBirth = DateTime.Parse("2002-05-06"),
             ReceiveNewsLetters = true
         };
@@ -467,7 +467,7 @@ public class PersonsServiceTest
             Email = "mary@example.com",
             Gender = GenderOptions.Female,
             Address = "address of mary",
-            CountryID = country_response_2.CountryId,
+            CountryID = country_response_2.CountryID,
             DateOfBirth = DateTime.Parse("2000-02-02"),
             ReceiveNewsLetters = false
         };
@@ -478,7 +478,7 @@ public class PersonsServiceTest
             Email = "rahman@example.com",
             Gender = GenderOptions.Male,
             Address = "address of rahman",
-            CountryID = country_response_2.CountryId,
+            CountryID = country_response_2.CountryID,
             DateOfBirth = DateTime.Parse("1999-03-03"),
             ReceiveNewsLetters = true
         };
