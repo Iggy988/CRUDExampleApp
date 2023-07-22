@@ -12,7 +12,9 @@
     <body>
         <div class="container">
             <div class="navbar">
-                <div class ="navbar-brand">CRUD Demo</div>
+                <div class ="navbar-brand">
+                    <img src="~/logo.png" width="50px" asp-append-version="true"/>
+                </div>
                 <ul>
                     <li>
                         <a href="~/persons/index">Persons</a>
@@ -27,5 +29,7 @@
                 @RenderBody()
             </div>
         </div>
+        @*da renderujemo scripte u views(naziv section, required false-neke view ne trebaju js scriptu, pda da ih ne prisiljavamo da loaduju)*@
+    @RenderSection("scripts", required: false)
     </body>
 </html>
