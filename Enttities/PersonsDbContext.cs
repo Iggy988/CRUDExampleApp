@@ -52,4 +52,9 @@ public class PersonsDbContext : DbContext
         }
 
     }
+
+    public static implicit operator List<object>(PersonsDbContext v)
+    {
+        throw new NotImplementedException();
+    }
 }
