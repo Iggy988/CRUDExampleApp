@@ -47,8 +47,9 @@ namespace Services
             person.PersonID = Guid.NewGuid();
 
             //add person object to persons list
-            _db.Persons.Add(person);
-            _db.SaveChanges();
+            //_db.Persons.Add(person);
+            //_db.SaveChanges();
+            _db.sp_InsertPerson(person); // kad koristimo stored procedure
 
             //convert the Person object into PersonResponse type
             return ConvertPersonToPersonResponse(person);
@@ -62,7 +63,9 @@ namespace Services
             //  .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
 
             //SELECT * from Persons -> prvo execute query, pa tek onda mozemo linq sa user defined method
-            return _db.Persons.ToList()/*data has been loaded from db in inmemory, nakon toga mozemo zvati koji hocemo metod*/
+            //return _db.Persons.ToList()/*data has been loaded from db in inmemory, nakon toga mozemo zvati koji hocemo metod*/
+            //kad kreiramo stored procedure
+            return _db.sp_GetAllPersons()
                 .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
         }
 
