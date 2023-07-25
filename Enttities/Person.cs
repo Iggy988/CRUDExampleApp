@@ -1,5 +1,6 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Enttities;
 /// <summary>
@@ -7,9 +8,10 @@ namespace Enttities;
 /// </summary>
 public class Person
 {
+    //primary key
     [Key]
     public Guid PersonID { get; set; }
-    //nvarchar(max)
+    //nvarchar(40)
     [StringLength(40)]
     public string? PersonName { get; set; }
     [StringLength(40)]
@@ -23,6 +25,11 @@ public class Person
     public string? Address { get; set; }
     //bit
     public bool ReceiveNewsLetters { get; set; }
+    //nvarchar - svi moguci characteri
+    public string? TIN { get; set; }
 
-    
+    //in detail model class we can access master class
+    [ForeignKey("CountryID")]
+    public virtual Country? Country { get; set; }
+
 }

@@ -5,6 +5,8 @@ using ServiceContracts.DTO;
 using ServiceContracts.Enums;
 using Services.Helpers;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace Services
 {
@@ -22,12 +24,13 @@ namespace Services
         }
 
 
-        private PersonResponse ConvertPersonToPersonResponse(Person person)
-        {
-            PersonResponse personResponse = person.ToPersonResponse();
-            personResponse.Country = _countriesService.GetCountryByCountryId(person.CountryID)?.CountryName;
-            return personResponse;
-        }
+        //private PersonResponse ConvertPersonToPersonResponse(Person person)
+        //{
+        //    PersonResponse personResponse = person.ToPersonResponse();
+        //    //personResponse.Country = _countriesService.GetCountryByCountryId(person.CountryID)?.CountryName;
+        //    personResponse.Country = person.Country?.CountryName;
+        //    return personResponse;
+        //}
 
         public PersonResponse AddPerson(PersonAddRequest? personAddRequest)
         {
@@ -47,26 +50,30 @@ namespace Services
             person.PersonID = Guid.NewGuid();
 
             //add person object to persons list
-            //_db.Persons.Add(person);
-            //_db.SaveChanges();
-            _db.sp_InsertPerson(person); // kad koristimo stored procedure
+            _db.Persons.Add(person);
+            _db.SaveChanges();
+
+            //_db.sp_InsertPerson(person); // kad koristimo stored procedure
 
             //convert the Person object into PersonResponse type
-            return ConvertPersonToPersonResponse(person);
+            //return ConvertPersonToPersonResponse(person);
+            return person.ToPersonResponse();
         }
 
 
         public List<PersonResponse> GetAllPersons()
         {
+            var persons = _db.Persons.Include("Country").ToList();
             //ne mozemo zvati custom metode kao dio LINQ entities expresion
-            //return _db.Persons
-            //  .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
-
+            //return _db.Persons.ToList()
+            return persons
+              .Select(temp => temp.ToPersonResponse()).ToList();
             //SELECT * from Persons -> prvo execute query, pa tek onda mozemo linq sa user defined method
             //return _db.Persons.ToList()/*data has been loaded from db in inmemory, nakon toga mozemo zvati koji hocemo metod*/
+            
             //kad kreiramo stored procedure
-            return _db.sp_GetAllPersons()
-                .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
+            //return _db.sp_GetAllPersons()
+            //    .Select(temp => ConvertPersonToPersonResponse(temp)).ToList();
         }
 
 
@@ -75,13 +82,15 @@ namespace Services
             if (personID == null)
                 return null;
 
-            Person? person = _db.Persons
+            Person? person = _db.Persons.Include("Country")
                 .FirstOrDefault(temp => temp.PersonID == personID);
+
+
             
             if (person == null)
                 return null;
 
-            return ConvertPersonToPersonResponse(person);
+            return person.ToPersonResponse();
         }
 
         public List<PersonResponse> GetFilteredPersons(string searchBy, string? searchString)
@@ -209,7 +218,7 @@ namespace Services
 
             //kad god mijenjamo unos moramo staviti _db.SaveChanges(); 
             _db.SaveChanges(); //UPDATE
-            return ConvertPersonToPersonResponse(matchingPerson);
+            return matchingPerson.ToPersonResponse();
         }
 
         public bool DeletePerson(Guid? personID)

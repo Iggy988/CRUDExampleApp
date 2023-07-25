@@ -84,7 +84,7 @@ public static class PersonExtensions
             CountryID = person.CountryID,
             Gender = person.Gender,
             //racunamo godine na osnovu DateOfBirth
-            Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null,
+            Age = (person.DateOfBirth != null) ? Math.Round((DateTime.Now - person.DateOfBirth.Value).TotalDays / 365.25) : null, Country =person.Country?.CountryName
         };
     }
 }
