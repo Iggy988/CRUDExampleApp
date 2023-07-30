@@ -1,5 +1,7 @@
 ﻿using Enttities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using OfficeOpenXml;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -85,5 +87,45 @@ public class CountriesService : ICountriesService
         }
         //converting country obj to countryResponse type
         return country_response_from_list.ToCountryResponse();
+    }
+
+    public async Task<int> UploadCountriesFromExcelFile(IFormFile formFile)
+    {
+        MemoryStream memoryStream = new MemoryStream();
+        await formFile.CopyToAsync(memoryStream);
+
+        int countriesInserted = 0;
+
+        using (ExcelPackage excelPackage = new ExcelPackage(memoryStream))
+        {
+            ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets["Countries"];
+
+            int rowCount = worksheet.Dimension.Rows;
+            
+
+            // row 1 je header row (CountryName)
+            for(int row= 2; row <= rowCount; row++)
+            {
+                //row 2 col 1
+                string? cellValue = Convert.ToString(worksheet.Cells[row, 1].Value);
+
+                if (!string.IsNullOrEmpty(cellValue))
+                {
+                    string? countryName = cellValue;
+
+                    // ako ima jedan matching object onda ne unosimo(ako nema duplih imena)
+                    if(_db.Countries.Where(temp => temp.CountryName == countryName).Count() == 0)
+                    {
+                        Country country = new Country() { CountryName = countryName};
+                        _db.Countries.Add(country);
+                        await _db.SaveChangesAsync();
+
+                        countriesInserted++;
+                    }
+                }
+            }
+        }
+
+        return countriesInserted;
     }
 }
