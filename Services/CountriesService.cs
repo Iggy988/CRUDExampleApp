@@ -11,9 +11,9 @@ public class CountriesService : ICountriesService
 {
     //private field
     //private readonly List<Country> _countries;
-    private readonly PersonsDbContext _db;
+    private readonly ApplicationDbContext _db;
     //constructor
-    public CountriesService(PersonsDbContext personsDbContext /*, bool initialize = true*/)
+    public CountriesService(ApplicationDbContext personsDbContext /*, bool initialize = true*/)
     {
         //_countries = new List<Country>();
         _db = personsDbContext;

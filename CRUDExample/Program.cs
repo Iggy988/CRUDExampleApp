@@ -13,7 +13,7 @@ builder.Services.AddScoped<ICountriesService, CountriesService>();
 builder.Services.AddScoped<IPersonsService, PersonsService>();
 
 //service za di dbContext i UseSqlServer za db connection
-builder.Services.AddDbContext<PersonsDbContext>(opts =>
+builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 {
     opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });

@@ -11,17 +11,18 @@ using System.Threading.Tasks;
 
 namespace Enttities;
 
-public class PersonsDbContext : DbContext
+public class ApplicationDbContext : DbContext
 {
     //sve sto je uneseno u options u Program.cs (DbContextOptionsBuilder) bice proslijedjeno ovdje u options preko base
-    public PersonsDbContext(DbContextOptions options):base(options)
+    public ApplicationDbContext(DbContextOptions options):base(options)
     {
         
     }
 
     //db set per model class
-    public DbSet<Country> Countries { get; set; }
-    public DbSet<Person> Persons { get; set; }
+    // ako ih oznacimo sa virtual omogucavamo mocking child classes to override db sets
+    public virtual DbSet<Country> Countries { get; set; }
+    public virtual DbSet<Person> Persons { get; set; }
 
     //overridujemo metodu za spajanje dbSeta sa model class
     protected override void OnModelCreating(ModelBuilder modelBuilder)
