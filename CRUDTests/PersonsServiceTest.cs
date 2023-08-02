@@ -15,7 +15,7 @@ namespace CRUDTests;
 public class PersonsServiceTest
 {
     //private field
-    private readonly IPersonsService _personService;
+    private readonly IPersonsService _personRepository;
     private readonly ICountriesService _countriesService;
     //za printanje u consoli
     private readonly ITestOutputHelper _testOutputHelper;
@@ -42,9 +42,9 @@ public class PersonsServiceTest
         dbContextMock.CreateDbSetMock(temp => temp.Countries, countriesInitialData);
         dbContextMock.CreateDbSetMock(temp => temp.Persons, personsInitialData);
 
-        _countriesService = new CountriesService(dbContext);
+        _countriesService = new CountriesService(null);
         //_countriesService = new CountriesService(new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options));
-        _personService = new PersonsService(dbContext, _countriesService);
+        _personRepository = new PersonsService(null);
         //_personsService = new PersonsService(new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options), _countriesService); 
 
         _testOutputHelper = testOutputHelper;
@@ -63,7 +63,7 @@ public class PersonsServiceTest
         // fluent assertion package
         Func<Task> action = (async () => 
         {
-            await _personService.AddPerson(personAddRequest);
+            await _personRepository.AddPerson(personAddRequest);
         });
         
         await action.Should().ThrowAsync<ArgumentNullException>(); // fluent assertion package
@@ -90,7 +90,7 @@ public class PersonsServiceTest
         Func<Task> action = async() => // fluent assertion package
         {
             //Act
-            await _personService.AddPerson(personAddRequest);
+            await _personRepository.AddPerson(personAddRequest);
         };
         await action.Should().ThrowAsync<ArgumentException>(); // fluent assertion package
     }
@@ -119,9 +119,9 @@ public class PersonsServiceTest
         // Create -> kreira model automatski, Build -> mozemo pristupiti pojedinacnim props sa With (za custom property)
 
         //Act
-        PersonResponse person_response_from_add = await _personService.AddPerson(personAddRequest);
+        PersonResponse person_response_from_add = await _personRepository.AddPerson(personAddRequest);
 
-        List<PersonResponse> persons_list = await _personService.GetAllPersons();
+        List<PersonResponse> persons_list = await _personRepository.GetAllPersons();
 
         //Assert
         //Assert.True(person_response_from_add.PersonID != Guid.Empty);
@@ -165,7 +165,7 @@ public class PersonsServiceTest
 
         foreach (PersonAddRequest person_request in person_requests)
         {
-            PersonResponse person_response = await _personService.AddPerson(person_request);
+            PersonResponse person_response = await _personRepository.AddPerson(person_request);
             person_response_list_from_add.Add(person_response);
         }
 
@@ -177,7 +177,7 @@ public class PersonsServiceTest
         }
 
         //Act
-        List<PersonResponse> persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "");
+        List<PersonResponse> persons_list_from_search = await _personRepository.GetFilteredPersons(nameof(Person.PersonName), "");
 
         //print persons_list_from_get
         _testOutputHelper.WriteLine("Actual:");
@@ -231,7 +231,7 @@ public class PersonsServiceTest
 
         foreach (PersonAddRequest person_request in person_requests)
         {
-            PersonResponse person_response = await _personService.AddPerson(person_request);
+            PersonResponse person_response = await _personRepository.AddPerson(person_request);
             person_response_list_from_add.Add(person_response);
         }
 
@@ -243,7 +243,7 @@ public class PersonsServiceTest
         }
 
         //Act
-        List<PersonResponse> persons_list_from_search = await _personService.GetFilteredPersons(nameof(Person.PersonName), "ma");
+        List<PersonResponse> persons_list_from_search = await _personRepository.GetFilteredPersons(nameof(Person.PersonName), "ma");
 
         //print persons_list_from_get
         _testOutputHelper.WriteLine("Actual:");
@@ -307,7 +307,7 @@ public class PersonsServiceTest
 
         foreach (PersonAddRequest person_request in person_requests)
         {
-            PersonResponse person_response = await _personService.AddPerson(person_request);
+            PersonResponse person_response = await _personRepository.AddPerson(person_request);
             person_response_list_from_add.Add(person_response);
         }
 
@@ -317,10 +317,10 @@ public class PersonsServiceTest
         {
             _testOutputHelper.WriteLine(person_response_from_add.ToString());
         }
-        List<PersonResponse> allPersons = await _personService.GetAllPersons();
+        List<PersonResponse> allPersons = await _personRepository.GetAllPersons();
 
         //Act
-        List<PersonResponse> persons_list_from_sort = await _personService.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
+        List<PersonResponse> persons_list_from_sort = await _personRepository.GetSortedPersons(allPersons, nameof(Person.PersonName), SortOrderOptions.DESC);
 
         //print persons_list_from_get
         _testOutputHelper.WriteLine("Actual:");
@@ -351,7 +351,7 @@ public class PersonsServiceTest
         Guid? personID = null;
 
         //Act
-        PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(personID);
+        PersonResponse? person_response_from_get = await _personRepository.GetPersonByPersonID(personID);
 
         //Assert
         //Assert.Null(person_response_from_get);
@@ -386,9 +386,9 @@ public class PersonsServiceTest
             .With(temp => temp.Email, "something@sample.com")
             .Create();
 
-        PersonResponse person_response_from_add = await _personService.AddPerson(person_request);
+        PersonResponse person_response_from_add = await _personRepository.AddPerson(person_request);
 
-        PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(person_response_from_add.PersonID);
+        PersonResponse? person_response_from_get = await _personRepository.GetPersonByPersonID(person_response_from_add.PersonID);
 
         //Assert
         //Assert.Equal(person_response_from_add, person_response_from_get);
@@ -416,7 +416,7 @@ public class PersonsServiceTest
         // fluent assertion package
         Func<Task> action = async () =>
         {
-            await _personService.UpdatePerson(person_update_request);
+            await _personRepository.UpdatePerson(person_update_request);
         };
         //Assertion
         await action.Should().ThrowAsync<ArgumentNullException>();
@@ -434,7 +434,7 @@ public class PersonsServiceTest
         //Act
         Func<Task> action = async () =>
         {
-            await _personService.UpdatePerson(person_update_request);
+            await _personRepository.UpdatePerson(person_update_request);
         };
         //Assertion
         await action.Should().ThrowAsync<ArgumentException>();
@@ -462,7 +462,7 @@ public class PersonsServiceTest
             .With(temp => temp.CountryID, country_response.CountryID)
             .Create();
 
-        PersonResponse person_response_from_add = await _personService.AddPerson(person_add_request);
+        PersonResponse person_response_from_add = await _personRepository.AddPerson(person_add_request);
 
         PersonUpdateRequest person_update_request = person_response_from_add.ToPersonUpdateRequest();
         person_update_request.PersonName = null;
@@ -471,7 +471,7 @@ public class PersonsServiceTest
         //Act
         var action = async () =>
         {
-            await _personService.UpdatePerson(person_update_request);
+            await _personRepository.UpdatePerson(person_update_request);
         };
         //Assert
         await action.Should().ThrowAsync<ArgumentException>();
@@ -499,16 +499,16 @@ public class PersonsServiceTest
          .With(temp => temp.CountryID, country_response.CountryID)
          .Create();
 
-        PersonResponse person_response_from_add = await _personService.AddPerson(person_add_request);
+        PersonResponse person_response_from_add = await _personRepository.AddPerson(person_add_request);
 
         PersonUpdateRequest person_update_request = person_response_from_add.ToPersonUpdateRequest();
         person_update_request.PersonName = "William";
         person_update_request.Email = "william@example.com";
 
         //Act
-        PersonResponse person_response_from_update = await _personService.UpdatePerson(person_update_request);
+        PersonResponse person_response_from_update = await _personRepository.UpdatePerson(person_update_request);
 
-        PersonResponse? person_response_from_get = await _personService.GetPersonByPersonID(person_response_from_update.PersonID);
+        PersonResponse? person_response_from_get = await _personRepository.GetPersonByPersonID(person_response_from_update.PersonID);
 
         //Assert
         //Assert.Equal(person_response_from_get, person_response_from_update);
@@ -535,11 +535,11 @@ public class PersonsServiceTest
          .With(temp => temp.CountryID, country_response.CountryID)
          .Create();
 
-        PersonResponse person_response_from_add = await _personService.AddPerson(person_add_request);
+        PersonResponse person_response_from_add = await _personRepository.AddPerson(person_add_request);
 
 
         //Act
-        bool isDeleted = await _personService.DeletePerson(person_response_from_add.PersonID);
+        bool isDeleted = await _personRepository.DeletePerson(person_response_from_add.PersonID);
 
         //Assert
         //Assert.True(isDeleted);
@@ -553,7 +553,7 @@ public class PersonsServiceTest
     public async Task DeletePerson_InvalidPersonID()
     {
         //Act
-        bool isDeleted = await _personService.DeletePerson(Guid.NewGuid());
+        bool isDeleted = await _personRepository.DeletePerson(Guid.NewGuid());
 
         //Assert
         //Assert.False(isDeleted);
@@ -570,7 +570,7 @@ public class PersonsServiceTest
     public async Task GetAllPersons_EmptyList()
     {
         //Act
-        List<PersonResponse> persons_from_get = await _personService.GetAllPersons();
+        List<PersonResponse> persons_from_get = await _personRepository.GetAllPersons();
 
         //Assert 
         //Assert.Empty(persons_from_get);
@@ -642,7 +642,7 @@ public class PersonsServiceTest
         foreach (PersonAddRequest person_request in person_requests)
         {
             //adding 3 persons
-            PersonResponse person_response = await _personService.AddPerson(person_request);
+            PersonResponse person_response = await _personRepository.AddPerson(person_request);
             person_response_list_from_add.Add(person_response);//it is not async method - it is normal Add method
         }
         
@@ -654,7 +654,7 @@ public class PersonsServiceTest
         }
 
         //Act
-        List<PersonResponse> persons_list_from_get = await _personService.GetAllPersons();
+        List<PersonResponse> persons_list_from_get = await _personRepository.GetAllPersons();
 
         //print persons_list_from_get
         _testOutputHelper.WriteLine("Actual:");

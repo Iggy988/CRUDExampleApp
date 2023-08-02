@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 
@@ -10,25 +11,14 @@ namespace Services;
 public class CountriesService : ICountriesService
 {
     //private field
-    //private readonly List<Country> _countries;
-    private readonly ApplicationDbContext _db;
+    // u repository pattern prebacujemo iz ApplicationDbContext u ICountriesRepository
+    private readonly ICountriesRepository _countriesRepository;
     //constructor
-    public CountriesService(ApplicationDbContext personsDbContext /*, bool initialize = true*/)
+    public CountriesService(ICountriesRepository countriesRepository)
     {
-        //_countries = new List<Country>();
-        _db = personsDbContext;
+        _countriesRepository = countriesRepository;
 
-        /*if (initialize)
-        {
-            _countries.AddRange(new List<Country>()
-            {
-                new Country() { CountryID = Guid.Parse("99028B14-DD57-48E8-BDD7-9DA61D667A38"), CountryName = "Serbia" },
-                new Country() { CountryID = Guid.Parse("CB2115A6-DCCC-4ABF-80E9-BEF4028FC405"), CountryName = "Russia" },
-                new Country() { CountryID = Guid.Parse("7589930A-907D-4155-8990-4FEE785D17B0"), CountryName = "USA" },
-                new Country() { CountryID = Guid.Parse("56A24F2F-558A-4DCC-BD06-F4D8CA6FE184"), CountryName = "Japan" },
-                new Country() { CountryID = Guid.Parse("C03F748F-ABBA-4DB1-81D0-6A09CD89B2AE"), CountryName = "India" }
-            });
-        }*/
+
     }
     public async Task<CountryResponse> AddCountry(CountryAddRequest? countryAddRequest)
     {
@@ -46,8 +36,7 @@ public class CountriesService : ICountriesService
         }
 
         //Validation: CountryName cant be duplicate
-        if (await _db.Countries
-            .CountAsync(temp => temp.CountryName == countryAddRequest.CountryName) > 0)
+        if (await _countriesRepository.GetCountryByCountryName(countryAddRequest.CountryName) != null)
         {
             throw new ArgumentException("Given country name already exist");
         }
@@ -59,17 +48,20 @@ public class CountriesService : ICountriesService
         country.CountryID = Guid.NewGuid();
 
         //Add country object into _countries
-        _db.Countries.Add(country);
-        await _db.SaveChangesAsync();
+        await _countriesRepository.AddCountry(country);
+        // ne treba ponovo pozivati SaveChangesAsync(); - pozvali smo u Repository class
+        //await _countriesRepository.SaveChangesAsync();
 
         return country.ToCountryResponse();
     }
 
     public async Task<List<CountryResponse>> GetAllCountries()
     {
-        //converting each element from country to ToCountryResponse -> returns ToCountryResponse
-        return await _db.Countries
-            .Select(country => country.ToCountryResponse()).ToListAsync();
+        //returns list of country object
+        List<Country> countries = await _countriesRepository.GetAllCountries();
+        //converting all countryResponse object to plain list
+        return countries.Select(country => country.ToCountryResponse()).ToList();
+       
     }
 
     public async Task<CountryResponse?> GetCountryByCountryId(Guid? countryID)
@@ -79,8 +71,7 @@ public class CountriesService : ICountriesService
             return null;
         }
         // ako ni jedan element ne odgovara vracamo default(null)
-        Country? country_response_from_list = await _db.Countries
-            .FirstOrDefaultAsync(temp => temp.CountryID == countryID);
+        Country? country_response_from_list = await _countriesRepository.GetCountryByCountryID(countryID.Value);
         if(country_response_from_list == null) 
         { 
             return null; 
@@ -114,11 +105,10 @@ public class CountriesService : ICountriesService
                     string? countryName = cellValue;
 
                     // ako ima jedan matching object onda ne unosimo(ako nema duplih imena)
-                    if(_db.Countries.Where(temp => temp.CountryName == countryName).Count() == 0)
+                    if(_countriesRepository.GetCountryByCountryName(countryName) == null)
                     {
                         Country country = new Country() { CountryName = countryName};
-                        _db.Countries.Add(country);
-                        await _db.SaveChangesAsync();
+                        await _countriesRepository.AddCountry(country);
 
                         countriesInserted++;
                     }

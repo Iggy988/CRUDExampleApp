@@ -6,7 +6,7 @@ namespace Services.Helpers;
 
 public class ValidationHelper
 {
-    internal static void ModelValiddation(object obj)  
+    internal static void ModelValidation(object obj)  
     {
         //Model Validations
         ValidationContext validationContext = new(obj);
