@@ -9,7 +9,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 
-
 //add services into IoC container
 builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
@@ -31,8 +30,8 @@ if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
-
-Rotativa.AspNetCore.RotativaConfiguration.Setup(rootPath:"wwwroot", wkhtmltopdfRelativePath:"Rotativa");
+if (builder.Environment.IsEnvironment("Test")==false)
+    Rotativa.AspNetCore.RotativaConfiguration.Setup(rootPath:"wwwroot", wkhtmltopdfRelativePath:"Rotativa");
 
 app.UseStaticFiles();
 app.UseRouting();
@@ -41,3 +40,6 @@ app.MapControllers();
 
 
 app.Run();
+
+//make the auto-generated Program accessible programatically
+public partial class Program { }
