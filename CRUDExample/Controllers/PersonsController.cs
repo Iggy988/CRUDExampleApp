@@ -86,8 +86,8 @@ public class PersonsController : Controller
 
         //navigate to Index() action method (it makes another get request to "persons/index"
         return RedirectToAction("Index", "Persons");
-
     }
+
     //for loading edit view
     [HttpGet]
     [Route("[action]/{personID}")] //Eg: /persons/edit/1
