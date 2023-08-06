@@ -6,6 +6,17 @@ using RepositoryContracts;
 using Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Logging
+builder.Host.ConfigureLogging(loggingProvider => 
+{
+    loggingProvider.ClearProviders();
+    // dodajemo logging provider koji zelimo exoplicitno
+    loggingProvider.AddConsole(); 
+    loggingProvider.AddDebug();
+    loggingProvider.AddEventLog();
+});
+
 builder.Services.AddControllersWithViews();
 
 
@@ -26,10 +37,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 
 var app = builder.Build();
 
+
+
 if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+/*
+app.Logger.LogDebug("debug-message");
+app.Logger.LogInformation("information-message");
+app.Logger.LogWarning("warning-message");
+app.Logger.LogError("error-message");
+app.Logger.LogCritical("critical-message");
+*/
+
 if (builder.Environment.IsEnvironment("Test")==false)
     Rotativa.AspNetCore.RotativaConfiguration.Setup(rootPath:"wwwroot", wkhtmltopdfRelativePath:"Rotativa");
 
