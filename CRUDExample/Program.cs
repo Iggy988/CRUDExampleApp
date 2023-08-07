@@ -4,18 +4,32 @@ using Enttities;
 using Microsoft.EntityFrameworkCore;
 using RepositoryContracts;
 using Repositories;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpLogging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Logging
-builder.Host.ConfigureLogging(loggingProvider => 
+//builder.Host.ConfigureLogging(loggingProvider => 
+//{
+//    loggingProvider.ClearProviders();
+//    // dodajemo logging provider koji zelimo exoplicitno
+//    loggingProvider.AddConsole(); 
+//    loggingProvider.AddDebug();
+//    loggingProvider.AddEventLog();
+//});
+
+//Serilog
+builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration loggerConfiguration) =>
 {
-    loggingProvider.ClearProviders();
-    // dodajemo logging provider koji zelimo exoplicitno
-    loggingProvider.AddConsole(); 
-    loggingProvider.AddDebug();
-    loggingProvider.AddEventLog();
+    loggerConfiguration
+    //read configuration settings from built -in IConfiguration
+    .ReadFrom.Configuration(context.Configuration)
+    //read out current app services and make them available to serilog
+    .ReadFrom.Services(services);
 });
+
 
 builder.Services.AddControllersWithViews();
 
@@ -35,6 +49,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(opts =>
 
 //Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PersonsDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
 
+builder.Services.AddHttpLogging(opt =>
+{
+    opt.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
+
 var app = builder.Build();
 
 
@@ -43,6 +62,9 @@ if (builder.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+//http logging
+app.UseHttpLogging();
 
 /*
 app.Logger.LogDebug("debug-message");
