@@ -12,6 +12,9 @@ using FluentAssertions;
 using RepositoryContracts;
 using Moq;
 using System.Linq.Expressions;
+using Serilog.Extensions.Hosting;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace CRUDTests;
 
@@ -36,8 +39,10 @@ public class PersonsServiceTest
         //koristimo dummy implementation of repo
         _personsRepository = _personRepositoryMock.Object;
 
+        var loggerMock = new Mock<ILogger<PersonsService>>();
+        var diagnosticContextMock = new Mock<IDiagnosticContext>();
         //_countriesService = new CountriesService(new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options));
-        _personService = new PersonsService(_personsRepository); //PersonsService has reference to personsRepository -> fake object(mocked obj) mock repository
+        _personService = new PersonsService(_personsRepository, loggerMock.Object, diagnosticContextMock.Object); //PersonsService has reference to personsRepository -> fake object(mocked obj) mock repository
         //_personsService = new PersonsService(new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options), _countriesService); 
 
         _testOutputHelper = testOutputHelper;
