@@ -37,7 +37,7 @@ public class Person
         return $"Person ID: {PersonID}," +
             $" Person Name: {PersonName}," +
             $" Email: {Email}," +
-            $" Date of Birth: {DateOfBirth?.ToString("MM/dd/yyyy")}," +
+            $" Date of Birth: {DateOfBirth?.ToString("dd MMMM yyyy")}," +
             $" Gender: {Gender}," +
             $" Country ID: {CountryID}," +
             $" Country: {Country?.CountryName}," +

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CRUDExample.Filters.ActionFilters;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Rotativa.AspNetCore;
 using ServiceContracts;
@@ -27,6 +28,8 @@ public class PersonsController : Controller
     //Url: index
     [Route("[action]")]
     [Route("/")]
+    // za unos  filtera
+    [TypeFilter(typeof(PersonsListActionFilter))]
     public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
         _logger.LogInformation("Index action method of PersonsController");
@@ -34,23 +37,27 @@ public class PersonsController : Controller
         _logger.LogDebug($"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
 
         //Search
-        ViewBag.SearchFields = new Dictionary<string, string>()
-      {
-        { nameof(PersonResponse.PersonName), "Person Name" },
-        { nameof(PersonResponse.Email), "Email" },
-        { nameof(PersonResponse.DateOfBirth), "Date of Birth" },
-        { nameof(PersonResponse.Gender), "Gender" },
-        { nameof(PersonResponse.CountryID), "Country" },
-        { nameof(PersonResponse.Address), "Address" }
-      };
+        // ne treba posto smo u action filteru pristupili viewData (LAKSE JE U CONTROLLER NEGO U FILTERIMA)
+        //  ViewBag.SearchFields = new Dictionary<string, string>()
+        //{
+        //  { nameof(PersonResponse.PersonName), "Person Name" },
+        //  { nameof(PersonResponse.Email), "Email" },
+        //  { nameof(PersonResponse.DateOfBirth), "Date of Birth" },
+        //  { nameof(PersonResponse.Gender), "Gender" },
+        //  { nameof(PersonResponse.CountryID), "Country" },
+        //  { nameof(PersonResponse.Address), "Address" }
+        //};
         List<PersonResponse> persons = await _personsService.GetFilteredPersons(searchBy, searchString);
-        ViewBag.CurrentSearchBy = searchBy;
-        ViewBag.CurrentSearchString = searchString;
+
+        // ne treba posto smo u action filteru pristupili viewData (LAKSE JE U CONTROLLER NEGO U FILTERIMA)
+        //ViewBag.CurrentSearchBy = searchBy;
+        //ViewBag.CurrentSearchString = searchString;
 
         //Sort
         List<PersonResponse> sortedPersons = await _personsService.GetSortedPersons(persons, sortBy, sortOrder);
-        ViewBag.CurrentSortBy = sortBy;
-        ViewBag.CurrentSortOrder = sortOrder.ToString();
+        // ne treba posto smo u action filteru pristupili viewData
+        //ViewBag.CurrentSortBy = sortBy;
+        //ViewBag.CurrentSortOrder = sortOrder.ToString();
 
         return View(sortedPersons); //Views/Persons/Index.cshtml
     }

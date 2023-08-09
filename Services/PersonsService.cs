@@ -247,7 +247,7 @@ namespace Services
                 csvWriter.WriteField(person.PersonName);
                 csvWriter.WriteField(person.Email);
                 if (person.DateOfBirth.HasValue)
-                    csvWriter.WriteField(person.DateOfBirth.Value.ToString("yyyy-MM-dd"));
+                    csvWriter.WriteField(person.DateOfBirth.Value.ToString("dd MMMM yyyy"));
                 else
                     csvWriter.WriteField("");
                 csvWriter.WriteField(person.Age);
@@ -292,7 +292,7 @@ namespace Services
                     workSheet.Cells[row, 1].Value = person.PersonName;
                     workSheet.Cells[row, 2].Value = person.Email;
                     if (person.DateOfBirth.HasValue)
-                        workSheet.Cells[row, 3].Value = person.DateOfBirth.Value.ToString("yyyy-MM-dd");
+                        workSheet.Cells[row, 3].Value = person.DateOfBirth.Value.ToString("dd MMMM yyyy");
                     workSheet.Cells[row, 4].Value = person.Age;
                     workSheet.Cells[row, 5].Value = person.Gender;
                     workSheet.Cells[row, 6].Value = person.Country;
