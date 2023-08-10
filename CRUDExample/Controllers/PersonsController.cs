@@ -10,6 +10,8 @@ using System.IO;
 namespace CRUDExample.Controllers;
 
 [Route("[controller]")]
+//parameterize action filter
+[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class", "My-Value-From-Class" }, Order = 2)]  //logger(ne stavljamo), key, value 
 public class PersonsController : Controller
 {
     //private fields
@@ -30,6 +32,7 @@ public class PersonsController : Controller
     [Route("/")]
     // za unos  filtera
     [TypeFilter(typeof(PersonsListActionFilter))]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action" }, Order = 1)]
     public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
         _logger.LogInformation("Index action method of PersonsController");
@@ -67,6 +70,7 @@ public class PersonsController : Controller
     //Url: persons/create
     [Route("[action]")]
     [HttpGet]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Method", "My-Value-From-Method" })] //svaki put moze druga vrijednost kad invoke PersonsListActionFilter
     public async Task<IActionResult> Create()
     {
         List<CountryResponse> countries = await _countriesService.GetAllCountries();

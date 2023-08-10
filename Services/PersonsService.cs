@@ -106,7 +106,7 @@ namespace Services
 
                     nameof(PersonResponse.DateOfBirth) =>
                      await _personsRepository.GetFilteredPersons(temp =>
-                     temp.DateOfBirth.Value.ToString("dd MMMM yyyy").Contains(searchString)),
+                     temp.DateOfBirth.Value.ToString().Contains(searchString)),
 
 
                     nameof(PersonResponse.Gender) =>

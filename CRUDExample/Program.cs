@@ -7,6 +7,7 @@ using Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
+using CRUDExample.Filters.ActionFilters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,18 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 });
 
 
-builder.Services.AddControllersWithViews();
+//it adds controllers and views as services
+builder.Services.AddControllersWithViews(opt =>
+{
+    //dodavanje action filtera globaly
+    //ne mozemo dodavati parametre
+    //opt.Filters.Add<ResponseHeaderActionFilter>();
+   
+    //dodavanje action filtera globaly
+    //mozemo dodavati parametre
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+    opt.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Key-From-Global", "My-Value-From-Global"));
+});
 
 
 //add services into IoC container
