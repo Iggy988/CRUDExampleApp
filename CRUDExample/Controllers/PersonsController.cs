@@ -5,13 +5,12 @@ using Rotativa.AspNetCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using ServiceContracts.Enums;
-using System.IO;
 
 namespace CRUDExample.Controllers;
 
 [Route("[controller]")]
 //parameterize action filter
-[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class", "My-Value-From-Class" }, Order = 2)]  //logger(ne stavljamo), key, value 
+[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3 }, Order = 3)]  //logger(ne stavljamo), key, value 
 public class PersonsController : Controller
 {
     //private fields
@@ -31,8 +30,8 @@ public class PersonsController : Controller
     [Route("[action]")]
     [Route("/")]
     // za unos  filtera
-    [TypeFilter(typeof(PersonsListActionFilter))]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action" }, Order = 1)]
+    [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
+    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Action", "My-Value-From-Action", 1 }, Order =1)] //key, value, order
     public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
         _logger.LogInformation("Index action method of PersonsController");

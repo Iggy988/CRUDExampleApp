@@ -2,31 +2,36 @@
 
 namespace CRUDExample.Filters.ActionFilters;
 
-public class ResponseHeaderActionFilter : IActionFilter
+public class ResponseHeaderActionFilter : IAsyncActionFilter, IOrderedFilter
 {
     private readonly ILogger<ResponseHeaderActionFilter> _logger;
-    private readonly string Key;
-    private readonly string Value;
+    private readonly string _key;
+    private readonly string _value;
 
-    public ResponseHeaderActionFilter(ILogger<ResponseHeaderActionFilter> logger, string key, string value)
+    public int Order { get; set; }
+
+    public ResponseHeaderActionFilter(ILogger<ResponseHeaderActionFilter> logger, string key, string value, int order)
     {
         _logger = logger;
-        Key = key;
-        Value = value;
+        _key = key;
+        _value = value;
+        //assigning paramter into property
+        Order = order;
     }
 
-    //before
-    public void OnActionExecuting(ActionExecutingContext context)
+
+
+    public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        _logger.LogInformation("{FilterName}.{MethodName}", nameof(ResponseHeaderActionFilter), nameof(OnActionExecuting));
-    }
-    //after
-    public void OnActionExecuted(ActionExecutedContext context)
-    {
-        _logger.LogInformation("{FilterName}.{MethodName}", nameof(ResponseHeaderActionFilter), nameof(OnActionExecuted));
+        //OnActionExecuting
+        _logger.LogInformation("{FilterName}.{MethodName} method- before", nameof(ResponseHeaderActionFilter), nameof(OnActionExecutionAsync));
+        //before
+        await next();//calls the subsequent filter or action
+                     //after
 
-        context.HttpContext.Response.Headers[Key] = Value;
-    }
+        //OnActionExecuted
+        _logger.LogInformation("{FilterName}.{MethodName} method - after", nameof(ResponseHeaderActionFilter), nameof(OnActionExecutionAsync));
 
-    
+        context.HttpContext.Response.Headers[_key] = _value;
+    }
 }

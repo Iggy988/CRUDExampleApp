@@ -38,11 +38,11 @@ builder.Services.AddControllersWithViews(opt =>
     //dodavanje action filtera globaly
     //ne mozemo dodavati parametre
     //opt.Filters.Add<ResponseHeaderActionFilter>();
-   
+    //opt.Filters.Add<ResponseHeaderActionFilter>(5);//mozemo dodati order
     //dodavanje action filtera globaly
     //mozemo dodavati parametre
     var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-    opt.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Key-From-Global", "My-Value-From-Global"));
+    opt.Filters.Add(new ResponseHeaderActionFilter(logger, "My-Key-From-Global", "My-Value-From-Global", 2));
 });
 
 
