@@ -1,5 +1,6 @@
 ﻿using CRUDExample.Filters.ActionFilters;
 using CRUDExample.Filters.AuthorizationFilter;
+using CRUDExample.Filters.ExceptionFilters;
 using CRUDExample.Filters.ResourceFilters;
 using CRUDExample.Filters.ResultFilters;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace CRUDExample.Controllers;
 [Route("[controller]")]
 //parameterize action filter
 [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3 }, Order = 3)]  //logger(ne stavljamo), key, value 
+[TypeFilter(typeof(HandleExceptionFilter))]
 public class PersonsController : Controller
 {
     //private fields
@@ -92,16 +94,6 @@ public class PersonsController : Controller
     [TypeFilter(typeof(FeatureDisabledResourceFilter), Arguments = new object[] { false})]
     public async Task<IActionResult> Create(PersonAddRequest personRequest)
     {
-        //if (!ModelState.IsValid)
-        //{
-        //    List<CountryResponse> countries = await _countriesService.GetAllCountries();
-        //    ViewBag.Countries = countries.Select(temp =>
-        //    new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
-
-        //    ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-            
-        //    return View(personRequest);
-        //} - prebacili smo u filter pa ne treba
 
         //call the service method
         PersonResponse personResponse = await _personsService.AddPerson(personRequest);
@@ -113,7 +105,7 @@ public class PersonsController : Controller
     //for loading edit view
     [HttpGet]
     [Route("[action]/{personID}")] //Eg: /persons/edit/1
-    [TypeFilter(typeof(TokenResultFilter))]
+    //[TypeFilter(typeof(TokenResultFilter))]
     public async Task<IActionResult> Edit(Guid personID)
     {
       PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personID);
@@ -136,6 +128,7 @@ public class PersonsController : Controller
     [Route("[action]/{personID}")]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     [TypeFilter(typeof(TokenAuthorizationFilter))]
+    [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
     public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
     {
         PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personRequest.PersonID);
@@ -148,16 +141,6 @@ public class PersonsController : Controller
         PersonResponse updatedPerson = await _personsService.UpdatePerson(personRequest);
         return RedirectToAction("Index", "Persons");
         
-        //if Model state is invalid
-        //else
-        //{
-        //    List<CountryResponse> countries = await _countriesService.GetAllCountries();
-        //    ViewBag.Countries = countries.Select(temp =>
-        //    new SelectListItem() { Text = temp.CountryName, Value = temp.CountryID.ToString() });
-
-        //    ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-        //    return View(personResponse.ToPersonUpdateRequest());
-        //} -- ne treba, provjeravamo u filteru
     }
 
     [HttpGet]
