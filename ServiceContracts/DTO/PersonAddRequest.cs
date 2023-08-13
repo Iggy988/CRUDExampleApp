@@ -18,7 +18,7 @@ public class PersonAddRequest
 
     [DataType(DataType.Date)]
     public DateTime? DateOfBirth { get; set; }
-    [Required(ErrorMessage = "Gender canot be blank")]
+    [Required(ErrorMessage = "Please select a gender")]
     public GenderOptions? Gender { get; set; }
     [Required(ErrorMessage = "Please select a country")]
     public Guid? CountryID { get; set; }

@@ -43,7 +43,7 @@ public class PersonsControllerTest
         //Arrange
         List<PersonResponse> persons_response_list = _fixture.Create<List<PersonResponse>>();
 
-        PersonsController personsController = new PersonsController(_personsService, _countriesService);
+        PersonsController personsController = new PersonsController(_personsService, _countriesService, null);
 
         _personsServiceMock
          .Setup(temp => temp.GetFilteredPersons(It.IsAny<string>(), It.IsAny<string>()))
@@ -85,7 +85,7 @@ public class PersonsControllerTest
          .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
          .ReturnsAsync(person_response);
 
-        PersonsController personsController = new(_personsService, _countriesService);
+        PersonsController personsController = new(_personsService, _countriesService, null);
 
 
         //Act
@@ -120,7 +120,7 @@ public class PersonsControllerTest
          .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
          .ReturnsAsync(person_response);
 
-        PersonsController personsController = new PersonsController(_personsService, _countriesService);
+        PersonsController personsController = new PersonsController(_personsService, _countriesService, null);
 
 
         //Act
