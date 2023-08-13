@@ -1,4 +1,5 @@
-﻿using CRUDExample.Filters.ActionFilters;
+﻿using CRUDExample.Filters;
+using CRUDExample.Filters.ActionFilters;
 using CRUDExample.Filters.AuthorizationFilter;
 using CRUDExample.Filters.ExceptionFilters;
 using CRUDExample.Filters.ResourceFilters;
@@ -16,6 +17,8 @@ namespace CRUDExample.Controllers;
 //parameterize action filter
 [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3 }, Order = 3)]  //logger(ne stavljamo), key, value 
 [TypeFilter(typeof(HandleExceptionFilter))]
+[TypeFilter(typeof(PersonAlwaysRunResultFilter))]
+
 public class PersonsController : Controller
 {
     //private fields
@@ -34,8 +37,12 @@ public class PersonsController : Controller
     //Url: persons/index
     [Route("[action]")]
     [Route("/")]
-    [TypeFilter(typeof(PersonsListActionFilter), Order = 4)]
+    [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
     [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "MyKey-FromAction", "MyValue-From-Action", 1 }, Order = 1)]
+
+    [ResponseHeaderActionFilter("MyKey-FromAction", "MyValue-From-Action", 1)]
+
+    [SkipFilter]
     //[TypeFilter(typeof(PersonsListResultFilter))]
     public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
@@ -44,16 +51,6 @@ public class PersonsController : Controller
         _logger.LogDebug($"searchBy: {searchBy}, searchString: {searchString}, sortBy: {sortBy}, sortOrder: {sortOrder}");
 
         //Search
-        // ne treba posto smo u action filteru pristupili viewData (LAKSE JE U CONTROLLER NEGO U FILTERIMA)
-        //  ViewBag.SearchFields = new Dictionary<string, string>()
-        //{
-        //  { nameof(PersonResponse.PersonName), "Person Name" },
-        //  { nameof(PersonResponse.Email), "Email" },
-        //  { nameof(PersonResponse.DateOfBirth), "Date of Birth" },
-        //  { nameof(PersonResponse.Gender), "Gender" },
-        //  { nameof(PersonResponse.CountryID), "Country" },
-        //  { nameof(PersonResponse.Address), "Address" }
-        //};
         List<PersonResponse> persons = await _personsService.GetFilteredPersons(searchBy, searchString);
 
         // ne treba posto smo u action filteru pristupili viewData (LAKSE JE U CONTROLLER NEGO U FILTERIMA)
@@ -128,7 +125,7 @@ public class PersonsController : Controller
     [Route("[action]/{personID}")]
     [TypeFilter(typeof(PersonCreateAndEditPostActionFilter))]
     [TypeFilter(typeof(TokenAuthorizationFilter))]
-    [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
+    //[TypeFilter(typeof(PersonAlwaysRunResultFilter))]
     public async Task<IActionResult> Edit(PersonUpdateRequest personRequest)
     {
         PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personRequest.PersonID);

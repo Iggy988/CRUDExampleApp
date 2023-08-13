@@ -10,5 +10,10 @@ public class PersonAlwaysRunResultFilter : IAlwaysRunResultFilter
 
     public void OnResultExecuting(ResultExecutingContext context)
     {
+        if (context.Filters.OfType<SkipFilter>().Any()) 
+        {
+            return;
+        }
+        //TODO before logic
     }
 }
