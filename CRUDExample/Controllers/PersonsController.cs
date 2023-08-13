@@ -38,7 +38,7 @@ public class PersonsController : Controller
     [Route("[action]")]
     [Route("/")]
     [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "MyKey-FromAction", "MyValue-From-Action", 1 }, Order = 1)]
+    //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "MyKey-FromAction", "MyValue-From-Action", 1 }, Order = 1)]
 
     [ResponseHeaderActionFilter("MyKey-FromAction", "MyValue-From-Action", 1)]
 
@@ -71,7 +71,8 @@ public class PersonsController : Controller
     //Url: persons/create
     [Route("[action]")]
     [HttpGet]
-    [TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Method", "My-Value-From-Method", 4 })] //svaki put moze druga vrijednost kad invoke PersonsListActionFilter
+    //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Method", "My-Value-From-Method", 4 })] //svaki put moze druga vrijednost kad invoke PersonsListActionFilter
+    [ResponseHeaderActionFilter("My-Key-From-Method", "My-Value-From-Method", 4)]
     public async Task<IActionResult> Create()
     {
         List<CountryResponse> countries = await _countriesService.GetAllCountries();
