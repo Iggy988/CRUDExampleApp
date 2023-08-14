@@ -33,7 +33,7 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
 
 
 //it adds controllers and views as services
-builder.Services.AddControllersWithViews(opt =>
+/*builder.Services.AddControllersWithViews(opt =>
 {
     //dodavanje action filtera globaly
     //ne mozemo dodavati parametre
@@ -42,6 +42,22 @@ builder.Services.AddControllersWithViews(opt =>
     //dodavanje action filtera globaly
     //mozemo dodavati parametre
     opt.Filters.Add(new ResponseHeaderActionFilter( "My-Key-From-Global", "My-Value-From-Global", 2));
+});*/
+
+builder.Services.AddTransient<ResponseHeaderActionFilter>();
+
+//it adds controllers and views as services
+builder.Services.AddControllersWithViews(options => {
+    //options.Filters.Add<ResponseHeaderActionFilter>(5);
+
+    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
+
+    options.Filters.Add(new ResponseHeaderActionFilter(logger)
+    {
+        Key = "My-Key-From-Global",
+        Value = "My-Value-From-Global",
+        Order = 2
+    });
 });
 
 

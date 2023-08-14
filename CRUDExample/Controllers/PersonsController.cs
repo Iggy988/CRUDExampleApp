@@ -15,7 +15,8 @@ namespace CRUDExample.Controllers;
 
 [Route("[controller]")]
 //parameterize action filter
-[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3 }, Order = 3)]  //logger(ne stavljamo), key, value 
+//[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3 }, Order = 3)]  //logger(ne stavljamo), key, value 
+[ResponseHeaderFilterFactory("My-Key-From-Class-Controller", "My-Value-From-Class-Controller", 3)]
 [TypeFilter(typeof(HandleExceptionFilter))]
 [TypeFilter(typeof(PersonAlwaysRunResultFilter))]
 
@@ -40,7 +41,7 @@ public class PersonsController : Controller
     [ServiceFilter(typeof(PersonsListActionFilter), Order = 4)]
     //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "MyKey-FromAction", "MyValue-From-Action", 1 }, Order = 1)]
 
-    [ResponseHeaderActionFilter("MyKey-FromAction", "MyValue-From-Action", 1)]
+    [ResponseHeaderFilterFactory("MyKey-FromAction", "MyValue-From-Action", 1)]
 
     [SkipFilter]
     //[TypeFilter(typeof(PersonsListResultFilter))]
@@ -72,7 +73,7 @@ public class PersonsController : Controller
     [Route("[action]")]
     [HttpGet]
     //[TypeFilter(typeof(ResponseHeaderActionFilter), Arguments = new object[] { "My-Key-From-Method", "My-Value-From-Method", 4 })] //svaki put moze druga vrijednost kad invoke PersonsListActionFilter
-    [ResponseHeaderActionFilter("My-Key-From-Method", "My-Value-From-Method", 4)]
+    [ResponseHeaderFilterFactory("My-Key-From-Method", "My-Value-From-Method", 4)]
     public async Task<IActionResult> Create()
     {
         List<CountryResponse> countries = await _countriesService.GetAllCountries();
