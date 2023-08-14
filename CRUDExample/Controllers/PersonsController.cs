@@ -44,7 +44,7 @@ public class PersonsController : Controller
     [ResponseHeaderFilterFactory("MyKey-FromAction", "MyValue-From-Action", 1)]
 
     [SkipFilter]
-    //[TypeFilter(typeof(PersonsListResultFilter))]
+    [TypeFilter(typeof(PersonsListResultFilter))]
     public async Task<IActionResult> Index(string searchBy, string? searchString, string sortBy = nameof(PersonResponse.PersonName), SortOrderOptions sortOrder = SortOrderOptions.ASC)
     {
         _logger.LogInformation("Index action method of PersonsController");

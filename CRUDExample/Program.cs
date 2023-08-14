@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
 using CRUDExample.Filters.ActionFilters;
+using CRUDExample;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,57 +32,9 @@ builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, 
     .ReadFrom.Services(services);
 });
 
-
-//it adds controllers and views as services
-/*builder.Services.AddControllersWithViews(opt =>
-{
-    //dodavanje action filtera globaly
-    //ne mozemo dodavati parametre
-    //opt.Filters.Add<ResponseHeaderActionFilter>();
-    //opt.Filters.Add<ResponseHeaderActionFilter>(5);//mozemo dodati order
-    //dodavanje action filtera globaly
-    //mozemo dodavati parametre
-    opt.Filters.Add(new ResponseHeaderActionFilter( "My-Key-From-Global", "My-Value-From-Global", 2));
-});*/
-
-builder.Services.AddTransient<ResponseHeaderActionFilter>();
-
-//it adds controllers and views as services
-builder.Services.AddControllersWithViews(options => {
-    //options.Filters.Add<ResponseHeaderActionFilter>(5);
-
-    var logger = builder.Services.BuildServiceProvider().GetRequiredService<ILogger<ResponseHeaderActionFilter>>();
-
-    options.Filters.Add(new ResponseHeaderActionFilter(logger)
-    {
-        Key = "My-Key-From-Global",
-        Value = "My-Value-From-Global",
-        Order = 2
-    });
-});
+builder.Services.ConfigureServices(builder.Configuration);
 
 
-//add services into IoC container
-builder.Services.AddScoped<ICountriesRepository, CountriesRepository>();
-builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-
-builder.Services.AddScoped<ICountriesService, CountriesService>();
-builder.Services.AddScoped<IPersonsService, PersonsService>();
-
-//service za di dbContext i UseSqlServer za db connection
-builder.Services.AddDbContext<ApplicationDbContext>(opts =>
-{
-    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-// da mozemo inject u bilo koju class
-builder.Services.AddTransient<PersonsListActionFilter>();
-
-//Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=PersonsDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
-
-builder.Services.AddHttpLogging(opt =>
-{
-    opt.LoggingFields = HttpLoggingFields.RequestProperties | HttpLoggingFields.ResponsePropertiesAndHeaders;
-});
 
 var app = builder.Build();
 
@@ -97,13 +50,6 @@ if (builder.Environment.IsDevelopment())
 //http logging
 app.UseHttpLogging();
 
-/*
-app.Logger.LogDebug("debug-message");
-app.Logger.LogInformation("information-message");
-app.Logger.LogWarning("warning-message");
-app.Logger.LogError("error-message");
-app.Logger.LogCritical("critical-message");
-*/
 
 if (builder.Environment.IsEnvironment("Test")==false)
     Rotativa.AspNetCore.RotativaConfiguration.Setup(rootPath:"wwwroot", wkhtmltopdfRelativePath:"Rotativa");
@@ -111,8 +57,6 @@ if (builder.Environment.IsEnvironment("Test")==false)
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
-
-
 
 app.Run();
 

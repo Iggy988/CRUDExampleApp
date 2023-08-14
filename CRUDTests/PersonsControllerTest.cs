@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ServiceContracts.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Castle.Core.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace CRUDTests;
 
@@ -18,9 +20,12 @@ public class PersonsControllerTest
 {
     private readonly IPersonsService _personsService;
     private readonly ICountriesService _countriesService;
+    private readonly ILogger<PersonsController> _logger;
 
     private readonly Mock<ICountriesService> _countriesServiceMock;
     private readonly Mock<IPersonsService> _personsServiceMock;
+
+    private readonly Mock<ILogger<PersonsController>> _loggerMock;
 
     private readonly Fixture _fixture;
 
@@ -30,9 +35,11 @@ public class PersonsControllerTest
 
         _countriesServiceMock = new Mock<ICountriesService>();
         _personsServiceMock = new Mock<IPersonsService>();
+        _loggerMock = new Mock<ILogger<PersonsController>>();   
 
         _countriesService = _countriesServiceMock.Object;
         _personsService = _personsServiceMock.Object;
+        _logger = _loggerMock.Object;
     }
 
     #region Index
@@ -43,7 +50,7 @@ public class PersonsControllerTest
         //Arrange
         List<PersonResponse> persons_response_list = _fixture.Create<List<PersonResponse>>();
 
-        PersonsController personsController = new PersonsController(_personsService, _countriesService, null);
+        PersonsController personsController = new PersonsController(_personsService, _countriesService, _logger);
 
         _personsServiceMock
          .Setup(temp => temp.GetFilteredPersons(It.IsAny<string>(), It.IsAny<string>()))
@@ -66,7 +73,7 @@ public class PersonsControllerTest
 
 
     #region Create
-
+/*  filter odradjuje posao pa ne treba test za controller, mozemo testirati filter
     [Fact]
     public async void Create_IfModelErrors_ToReturnCreateView()
     {
@@ -85,7 +92,7 @@ public class PersonsControllerTest
          .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
          .ReturnsAsync(person_response);
 
-        PersonsController personsController = new(_personsService, _countriesService, null);
+        PersonsController personsController = new(_personsService, _countriesService, _logger);
 
 
         //Act
@@ -99,7 +106,7 @@ public class PersonsControllerTest
         viewResult.ViewData.Model.Should().BeAssignableTo<PersonAddRequest>();
 
         viewResult.ViewData.Model.Should().Be(person_add_request);
-    }
+    }*/
 
 
     [Fact]
@@ -120,7 +127,7 @@ public class PersonsControllerTest
          .Setup(temp => temp.AddPerson(It.IsAny<PersonAddRequest>()))
          .ReturnsAsync(person_response);
 
-        PersonsController personsController = new PersonsController(_personsService, _countriesService, null);
+        PersonsController personsController = new PersonsController(_personsService, _countriesService, _logger);
 
 
         //Act
