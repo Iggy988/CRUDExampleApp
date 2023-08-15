@@ -74,6 +74,7 @@ public class PersonsControllerTest
 
     #region Create
 /*  filter odradjuje posao pa ne treba test za controller, mozemo testirati filter
+ *  
     [Fact]
     public async void Create_IfModelErrors_ToReturnCreateView()
     {
