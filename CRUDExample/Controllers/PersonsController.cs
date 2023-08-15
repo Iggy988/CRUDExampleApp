@@ -136,7 +136,7 @@ public class PersonsController : Controller
         {
             return RedirectToAction("Index");
         }
-        //personRequest.PersonID = Guid.NewGuid();
+        //personRequest.PersonID = Guid.NewGuid(); da testiramo error handling
         PersonResponse updatedPerson = await _personsService.UpdatePerson(personRequest);
         return RedirectToAction("Index", "Persons");
         

@@ -47,6 +47,8 @@ if (builder.Environment.IsDevelopment())
 }
 else
 {
+    // redirection url
+    app.UseExceptionHandler("/Error");
     app.UseExceptionHandlingMiddleware();
 }
 
