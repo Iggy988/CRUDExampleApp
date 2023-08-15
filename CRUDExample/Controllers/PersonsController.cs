@@ -104,7 +104,7 @@ public class PersonsController : Controller
     //for loading edit view
     [HttpGet]
     [Route("[action]/{personID}")] //Eg: /persons/edit/1
-    //[TypeFilter(typeof(TokenResultFilter))]
+    [TypeFilter(typeof(TokenResultFilter))]
     public async Task<IActionResult> Edit(Guid personID)
     {
       PersonResponse? personResponse = await _personsService.GetPersonByPersonID(personID);
@@ -136,7 +136,7 @@ public class PersonsController : Controller
         {
             return RedirectToAction("Index");
         }
-
+        //personRequest.PersonID = Guid.NewGuid();
         PersonResponse updatedPerson = await _personsService.UpdatePerson(personRequest);
         return RedirectToAction("Index", "Persons");
         
