@@ -18,12 +18,12 @@ namespace CRUDTests;
 
 public class PersonsControllerTest
 {
-    private readonly IPersonsService _personsService;
+    private readonly IPersonsAdderService _personsService;
     private readonly ICountriesService _countriesService;
     private readonly ILogger<PersonsController> _logger;
 
     private readonly Mock<ICountriesService> _countriesServiceMock;
-    private readonly Mock<IPersonsService> _personsServiceMock;
+    private readonly Mock<IPersonsAdderService> _personsServiceMock;
 
     private readonly Mock<ILogger<PersonsController>> _loggerMock;
 
@@ -34,7 +34,7 @@ public class PersonsControllerTest
         _fixture = new Fixture();
 
         _countriesServiceMock = new Mock<ICountriesService>();
-        _personsServiceMock = new Mock<IPersonsService>();
+        _personsServiceMock = new Mock<IPersonsAdderService>();
         _loggerMock = new Mock<ILogger<PersonsController>>();   
 
         _countriesService = _countriesServiceMock.Object;

@@ -22,7 +22,7 @@ public class PersonsServiceTest
 {
 
     //private field
-    private readonly IPersonsService _personService;
+    private readonly IPersonsAdderService _personService;
     //za printanje u consoli
     private readonly ITestOutputHelper _testOutputHelper;
     //AutoFixture -> for filling dummy values into properties
@@ -39,7 +39,7 @@ public class PersonsServiceTest
         //koristimo dummy implementation of repo
         _personsRepository = _personRepositoryMock.Object;
 
-        var loggerMock = new Mock<ILogger<PersonsService>>();
+        var loggerMock = new Mock<ILogger<PersonsGetterService>>();
         var diagnosticContextMock = new Mock<IDiagnosticContext>();
         //_countriesService = new CountriesService(new ApplicationDbContext(new DbContextOptionsBuilder<ApplicationDbContext>().Options));
         _personService = new PersonsService(_personsRepository, loggerMock.Object, diagnosticContextMock.Object); //PersonsService has reference to personsRepository -> fake object(mocked obj) mock repository

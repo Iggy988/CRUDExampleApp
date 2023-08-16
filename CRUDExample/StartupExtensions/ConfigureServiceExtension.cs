@@ -35,7 +35,11 @@ public static class ConfigureServiceExtension
         services.AddScoped<IPersonsRepository, PersonsRepository>();
 
         services.AddScoped<ICountriesService, CountriesService>();
-        services.AddScoped<IPersonsService, PersonsService>();
+        services.AddScoped<IPersonsGetterService, PersonsGetterService>();
+        services.AddScoped<IPersonsAdderService, PersonsAdderService>();
+        services.AddScoped<IPersonsSorterService, PersonsSorterService>();
+        services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
+        services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
 
         //service za di dbContext i UseSqlServer za db connection
         services.AddDbContext<ApplicationDbContext>(opts =>
