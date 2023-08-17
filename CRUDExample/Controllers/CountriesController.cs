@@ -6,9 +6,9 @@ namespace CRUDExample.Controllers
     [Route("[controller]")]
     public class CountriesController : Controller
     {
-        private readonly ICountriesService _countriesService;
+        private readonly ICountriesUploaderService _countriesService;
 
-        public CountriesController(ICountriesService countriesService)
+        public CountriesController(ICountriesUploaderService countriesService)
         {
             _countriesService = countriesService;
         }

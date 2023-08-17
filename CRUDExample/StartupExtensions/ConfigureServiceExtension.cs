@@ -34,12 +34,15 @@ public static class ConfigureServiceExtension
         services.AddScoped<ICountriesRepository, CountriesRepository>();
         services.AddScoped<IPersonsRepository, PersonsRepository>();
 
-        services.AddScoped<ICountriesService, CountriesService>();
+        services.AddScoped<ICountriesGetterService, CountriesGetterService>();
+        services.AddScoped<ICountriesAdderService, CountriesAdderService>();
+        services.AddScoped<ICountriesUploaderService, CountriesUploaderService>();
+
         services.AddScoped<IPersonsGetterService, PersonsGetterService>();
         services.AddScoped<IPersonsAdderService, PersonsAdderService>();
-        services.AddScoped<IPersonsSorterService, PersonsSorterService>();
-        services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
         services.AddScoped<IPersonsDeleterService, PersonsDeleterService>();
+        services.AddScoped<IPersonsUpdaterService, PersonsUpdaterService>();
+        services.AddScoped<IPersonsSorterService, PersonsSorterService>();
 
         //service za di dbContext i UseSqlServer za db connection
         services.AddDbContext<ApplicationDbContext>(opts =>

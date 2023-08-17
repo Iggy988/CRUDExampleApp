@@ -29,11 +29,11 @@ public class PersonsController : Controller
     private readonly IPersonsDeleterService _personsDeleterService;
     private readonly IPersonsUpdaterService _personsUpdaterService;
 
-    private readonly ICountriesService _countriesService;
+    private readonly ICountriesGetterService _countriesService;
     private readonly ILogger<PersonsController> _logger;
 
     //constructor
-    public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsDeleterService personsDeleterService, IPersonsUpdaterService personsUpdaterService, IPersonsSorterService personsSorterService, ICountriesService countriesService, ILogger<PersonsController> logger)
+    public PersonsController(IPersonsGetterService personsGetterService, IPersonsAdderService personsAdderService, IPersonsDeleterService personsDeleterService, IPersonsUpdaterService personsUpdaterService, IPersonsSorterService personsSorterService, ICountriesGetterService countriesService, ILogger<PersonsController> logger)
     {
         _personsGetterService = personsGetterService;
         _personsAdderService = personsAdderService;
